@@ -1,6 +1,6 @@
 <template>
 <div class="node" :class="cls" :id="id" :data-pid="pId">
-  <div class="header" @click.self="autoExpand" :style="{'padding-left': (topLevelIndent + data.level * indent) + 'px'}">
+  <div class="header" @click.self="autoExpand" :style="{'padding-left': (data.level * indent) + 'px'}">
     <label :class="{checked: isChecked}"><input type="checkbox" :value="data.idx" :checked="isChecked" v-on:change="checkboxChanged" @click="checkboxClicked"></label>
     <div @click="autoExpand">
       <i v-show="expandable"></i>
@@ -10,7 +10,7 @@
   </div>
   <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-on:before-leave="beforeLeave" v-on:leave="leave">
     <div class="body" v-show="isBodyVisible">
-      <hsy-tree-node v-for="c in data.children" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :topLevelIndent="topLevelIndent" :data="c" :pId="id" :indent="indent" :cbExpanded="cbExpanded" :cbAbbred="cbAbbred" :cbCheckboxClicked="cbCheckboxClicked"
+      <hsy-tree-node v-for="c in data.children" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :data="c" :pId="id" :indent="indent" :cbExpanded="cbExpanded" :cbAbbred="cbAbbred" :cbCheckboxClicked="cbCheckboxClicked"
         :cbChanged="cbChanged"></hsy-tree-node>
     </div>
   </transition>
@@ -58,10 +58,6 @@ export default {
     pId: {
       type: [String, Number],
       default: ''
-    },
-    topLevelIndent: {
-      type: Number,
-      default: 0
     },
     indent: {
       type: Number,

@@ -1,7 +1,7 @@
 <template>
-<div class="hsy-tree" :id="id">
-  <node v-for="c in mutableData" :data="c" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :topLevelIndent="topLevelIndent" :indent="indent" :cbExpanded="expanded" :cbAbbred="abbred" :cbChanged="changed"></node>
-</div>
+  <div class="hsy-tree" :id="id">
+    <node v-for="c in mutableData" :data="c" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :indent="indent" :cbExpanded="expanded" :cbAbbred="abbred" :cbChanged="changed"></node>
+  </div>
 </template>
 
 <script>
@@ -11,7 +11,6 @@ let id = 0;
 
 export default {
   name: 'Tree',
-
   data() {
     return {
       checked: [],
@@ -23,10 +22,6 @@ export default {
     data: {
       type: Array,
       default: () => []
-    },
-    topLevelIndent: {
-      type: Number,
-      default: 0
     },
     indent: {
       type: Number,
