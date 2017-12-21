@@ -1,6 +1,6 @@
 <template>
   <div class="hsy-tree" :id="id">
-    <node v-for="c in mutableData" :data="c" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :indent="indent" :cbExpanded="expanded" :cbAbbred="abbred" :cbChanged="changed"></node>
+    <node v-for="c in mutableData" :data="c" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :indent="indent" :cbAbbred="abbred" :cbChanged="changed"></node>
   </div>
 </template>
 
@@ -36,21 +36,9 @@ export default {
         }
       }
     },
-    isCheckable: {
-      type: Boolean,
-      default: false
-    },
     loader: {
       type: Function,
       default: Node.EMPTY_FN
-    },
-    cbNodeClicked: {
-      type: Function,
-      default: Node.EMPTY_FN
-    },
-    defaultExpandAll: {
-      type: Boolean,
-      default: false
     },
     prepareEvenOddClass: {
       type: Boolean,
@@ -158,13 +146,7 @@ export default {
         i++
       })
     },
-    expanded() {
-      if (this.prepareEvenOddClass) {
-        this.updateEvenOddClass()
-        this.cbExpanded !== Node.EMPTY_FN && this.cbExpanded()
-      }
-    },
-    abbred() {
+    abbred () {
       if (this.prepareEvenOddClass) {
         this.updateEvenOddClass()
         this.cbAbbred !== Node.EMPTY_FN && this.cbAbbred()

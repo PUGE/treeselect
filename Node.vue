@@ -8,9 +8,9 @@
       <span v-if="useCustomHtmlLabel" v-html="customHtmlLabel(label)"></span>
     </div>
   </div>
-  <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-on:before-leave="beforeLeave" v-on:leave="leave">
+  <transition v-on:before-enter="beforeEnter" v-on:before-leave="beforeLeave" v-on:leave="leave">
     <div class="body" v-show="isBodyVisible">
-      <hsy-tree-node v-for="c in data.children" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :data="c" :pId="id" :indent="indent" :cbExpanded="cbExpanded" :cbAbbred="cbAbbred" :cbCheckboxClicked="cbCheckboxClicked"
+      <hsy-tree-node v-for="c in data.children" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :data="c" :pId="id" :indent="indent" :cbAbbred="cbAbbred" :cbCheckboxClicked="cbCheckboxClicked"
         :cbChanged="cbChanged"></hsy-tree-node>
     </div>
   </transition>
@@ -68,10 +68,6 @@ export default {
       default: () => {}
     },
     loader: {
-      type: Function,
-      default: EMPTY_FN
-    },
-    cbExpanded: {
       type: Function,
       default: EMPTY_FN
     },
@@ -181,25 +177,6 @@ export default {
       let rect = this.rect(el)
       el._height = rect.height
       el.style.height = '0px'
-    },
-    enter(el, done) {
-      if (el._height === 0) {
-        this.$nextTick(() => {
-          this.cbExpanded !== Node.EMPTY_FN && this.cbExpanded()
-        })
-      }
-      this.trans(el).then(() => {
-        done()
-        this.$nextTick(() => {
-          this.cbExpanded !== Node.EMPTY_FN && this.cbExpanded()
-        })
-      })
-      setTimeout(() => {
-        el.style.height = el._height + 'px'
-      }, 10)
-    },
-    afterEnter(el) {
-      el.style.height = 'auto'
     },
     beforeLeave(el) {
       let rect = this.rect(el)
