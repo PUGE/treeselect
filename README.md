@@ -13,19 +13,14 @@ npm install treeselect -S
 then import it into your project, add below code into your `main.js`:
 
 ```js
-import Tree from 'treeselect'
-
-Vue.use(Tree)
+import TreeSelect from 'treeselect'
 ```
 
 ## Usage
 
 ```html
 <template>
-  <tree :data="data" :loader="loader" :cbChanged="changed"></tree>
-  <div class="result">
-    Selected: {{ checked }}
-  </div>
+  <TreeSelect :data="data"></TreeSelect>
 </template>
 
 <script>
@@ -35,8 +30,7 @@ export default {
       data: [{
         label: '江苏',
         children: [{
-          label: '南京',
-          children: []
+          label: '南京'
         }]
       }, {
         label: '浙江',
@@ -48,30 +42,7 @@ export default {
             children: []
           }]
         }]
-      }],
-      checked: ''
-    }
-  },
-  methods: {
-    loader(node, resolve) {
-      setTimeout(() => {
-        if (node.data.label === '建邺区') {
-          resolve([{
-            label: '南湖街道',
-            children: []
-          }, {
-            label: '奥体',
-            children: []
-          }])
-        } else {
-          resolve([])
-        }
-      }, 3000)
-    },
-    changed(checked) {
-      this.checked = checked.map((c) => {
-        return c.label
-      }).join(', ')
+      }]
     }
   }
 }
