@@ -1,6 +1,6 @@
 <template>
   <div class="hsy-tree" :id="id">
-    <node v-for="c in mutableData" :data="c" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :indent="indent" :cbAbbred="abbred" :cbChanged="changed"></node>
+    <node v-for="(c, ind) in mutableData" :data="c" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :indent="indent" :key="ind" :cbAbbred="abbred" :cbChanged="changed"></node>
   </div>
 </template>
 
@@ -84,7 +84,11 @@ export default {
       let ret = data.map((item) => {
         let r = Object.assign({}, item)
         r.label = item[this.keyMap['label']]
-        r.children = item[this.keyMap['children']]
+        if (item[this.keyMap['children']]) {
+          r.children = item[this.keyMap['children']]
+        } else {
+          r.children = []
+        }
         return r
       })
       let walk = (items, level = 0, idx = 0) => {
@@ -98,6 +102,7 @@ export default {
         return idx
       }
       if (this.prepareEvenOddClass) {
+        console.log(ret)
         walk(ret)
       }
       return ret
@@ -119,14 +124,11 @@ export default {
       let op = (node) => {
         let id = node.id
         let body = document.querySelector(`#${id} > .body`)
-        let style = window.getComputedStyle(body)
         nodes.push(node)
-        if (style.getPropertyValue('display') !== 'none') {
-          let children = document.querySelectorAll(`#${id} > .body > .node`)
-          children = Array.prototype.slice.call(children)
-          if (children.length) {
-            this.walk(children, op)
-          }
+        let children = document.querySelectorAll(`#${id} > .body > .node`)
+        children = Array.prototype.slice.call(children)
+        if (children.length) {
+          this.walk(children, op)
         }
         return true
       }

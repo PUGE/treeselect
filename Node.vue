@@ -11,7 +11,7 @@
   <transition v-on:before-enter="beforeEnter" v-on:before-leave="beforeLeave" v-on:leave="leave">
     <div class="body" v-show="isBodyVisible">
       <hsy-tree-node v-for="c in data.children" :loader="loader" :customLabel="customLabel" :customHtmlLabel="customHtmlLabel" :data="c" :pId="id" :indent="indent" :cbAbbred="cbAbbred" :cbCheckboxClicked="cbCheckboxClicked"
-        :cbChanged="cbChanged"></hsy-tree-node>
+        :cbChanged="cbChanged" :key="id"></hsy-tree-node>
     </div>
   </transition>
 </div>
@@ -19,11 +19,8 @@
 
 <script>
 const TRANS_EVENTS = ['webkitTransitionEnd', 'mozTransitionEnd', 'oTransitionEnd', 'transitionend']
-
 let id = 0
-
 const EMPTY_FN = () => {}
-
 const fireChange = (() => {
   if ('createEvent' in document) {
     return (element) => {
@@ -36,12 +33,9 @@ const fireChange = (() => {
       element.fireEvent('onchange')
     }
 })()
-
 export default {
   name: 'hsy-tree-node',
-
   EMPTY_FN,
-
   data() {
     return {
       isChecked: !!this.data.isChecked,
@@ -119,13 +113,11 @@ export default {
     },
     checkboxClicked(evt) {
       this.data.isChecked = evt.target.checked
-
       let inputs = this.$el.querySelectorAll('.body input[type=checkbox]')
       inputs.forEach((ipt) => {
         ipt.checked = evt.target.checked
         fireChange(ipt)
       })
-
       let pId = this.$el.getAttribute('data-pid')
       while (pId !== '') {
         let children = document.querySelectorAll(`#${pId} > .body input[type=checkbox]`)
@@ -136,7 +128,6 @@ export default {
         let parent = document.getElementById(pId)
         pId = parent.getAttribute('data-pid')
       }
-
       if (this.cbChanged !== EMPTY_FN) {
         let nodes = document.querySelectorAll('.hsy-tree input[type=checkbox]:checked')
         nodes = Array.prototype.slice.call(nodes)
@@ -144,7 +135,6 @@ export default {
           return parseInt(node.value)
         }))
       }
-
       this.cbCheckboxClicked(this, evt)
     },
     rect(el) {
@@ -227,5 +217,4 @@ export default {
 </script>
 
 <style>
-
 </style>

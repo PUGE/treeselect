@@ -7,13 +7,13 @@ This is yet another vue tree component.
 Use npm to download code:
 
 ```
-npm install hsy-vue-tree -S
+npm install treeselect -S
 ```
 
 then import it into your project, add below code into your `main.js`:
 
 ```js
-import Tree from 'hsy-vue-tree'
+import Tree from 'treeselect'
 
 Vue.use(Tree)
 ```
@@ -77,7 +77,3 @@ export default {
 }
 </script>
 ```
-
-## Props
-
-Coming...
