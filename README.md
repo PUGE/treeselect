@@ -1,8 +1,8 @@
-# vue-tree
+# treeselect
 
-This is yet another vue tree component.
+二级菜单选择
 
-## Install
+## 安装
 
 Use npm to download code:
 
@@ -16,7 +16,7 @@ then import it into your project, add below code into your `main.js`:
 import TreeSelect from 'treeselect'
 ```
 
-## Usage
+## 使用
 
 ```html
 <template>
