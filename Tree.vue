@@ -1,7 +1,7 @@
 <template>
   <div class="tree-select-box">
     <!-- 加载动画 -->
-    <svg v-if="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-ripple" style="background: none;">
+    <svg v-if="loading" class="loadsvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;">
       <circle cx="50" cy="50" r="31.3416" fill="none" stroke="#8cd0e5" stroke-width="2">
         <animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate>
         <animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate>
@@ -13,6 +13,10 @@
     </svg>
     <div class="tree-select-item" v-else v-for="(item, ind) in dataCopy" :key="ind">
       <div class="tree-select-item-bar label">
+        <!-- 下拉图标 -->
+        <div class="drop-down" @click.stop="clickBar(ind)" :class="{open: show[ind]}">
+          <svg t="1514861854021" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2263" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M847.938 514.555l-669.322 392.953 192.683-398.022-195.238-392.993z" p-id="2264"></path></svg>
+        </div>
         <input v-if="!radio" name="treeSelect" type="checkbox" :value="item.label" v-model="item.checked" @change.stop="checkBoxClick($event.target, item)"/>
         <p @click.stop="clickBar(ind)">{{item.label}}</p>
         <!-- 判断是否有子项目，如果有显示角标 -->
@@ -103,13 +107,24 @@
 </script>
 
 <style scoped>
-  svg {
+  .loadsvg {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     margin: auto;
+  }
+  .drop-down {
+    padding: 7px;
+    display: flex;
+    transition: transform 0.2s;
+  }
+  .drop-down svg {
+    fill: #ccc;
+  }
+  .tree-select-item-bar .open {
+    transform:rotate(90deg)
   }
   .tree-select-box {
     position: relative;
