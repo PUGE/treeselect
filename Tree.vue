@@ -128,8 +128,8 @@
   }
   .tree-select-box {
     position: relative;
-    width: calc(100% - 20px);
-    height: calc(100% - 10px);
+    width: calc(100% - 10px);
+    height: calc(100% - 20px);
     overflow-x: hidden;
     overflow-y: auto;
     background: #EEE;
