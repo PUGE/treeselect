@@ -1,6 +1,6 @@
 {
   "name": "treeselect",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "vue tree component",
   "author": "puge <my@owo.help>",
   "main": "./index.js"
