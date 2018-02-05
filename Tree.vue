@@ -1,21 +1,6 @@
 <template>
   <div class="tree-select-box">
-    <!-- 加载动画 -->
-    <svg v-if="loading === 'loading'" class="loadsvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;">
-      <circle cx="50" cy="50" r="31.3416" fill="none" stroke="#8cd0e5" stroke-width="2">
-        <animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate>
-        <animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate>
-      </circle>
-      <circle cx="50" cy="50" r="10.8383" fill="none" stroke="#376888" stroke-width="2">
-        <animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="0s" repeatCount="indefinite"></animate>
-        <animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="0s" repeatCount="indefinite"></animate>
-      </circle>
-    </svg>
-    <!-- 错误面板 -->
-    <div v-else-if="loading === 'error'" class="error">
-      <svg t="1515032208380" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4561" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100"><path d="M90.217744 7.086395 7.150864 76.526931c148.075477 109.824291 286.129716 236.068554 407.130557 362.632087C228.579999 625.49489 83.146699 808.742425 6.515391 882.403075l158.246117 131.868353c56.121182-115.388007 178.382737-291.057959 341.933673-474.684116 163.741271 184.757934 286.259676 360.993774 342.815763 477.325269 0 0 154.206104-163.164127 167.972643-137.917116-59.526745-66.656119-204.136284-260.442684-399.125233-458.95897 111.663172-114.254184 236.962923-227.308029 370.776581-326.663898L952.72263 25.640983C800.911062 100.82022 656.739499 212.363665 527.017018 331.09072 396.105457 207.815069 247.958348 89.774653 90.217744 7.086395L90.217744 7.086395zM90.217744 7.086395" p-id="4562"></path></svg>
-    </div>
-    <div class="tree-select-item" v-else-if="loading === 'finish'" v-for="(item, ind) in dataCopy" :key="ind">
+    <div class="tree-select-item" v-if="dataList" v-for="(item, ind) in dataList" :key="ind">
       <div class="tree-select-item-bar label">
         <!-- 下拉图标 -->
         <div class="drop-down" @click.stop="clickBar(ind)" :class="{open: show[ind]}">
@@ -33,26 +18,34 @@
         </div>
       </div>
     </div>
+    <!-- 加载动画 -->
+    <svg v-else class="loadsvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;">
+      <circle cx="50" cy="50" r="31.3416" fill="none" stroke="#8cd0e5" stroke-width="2">
+        <animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate>
+        <animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate>
+      </circle>
+      <circle cx="50" cy="50" r="10.8383" fill="none" stroke="#376888" stroke-width="2">
+        <animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="0s" repeatCount="indefinite"></animate>
+        <animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="0s" repeatCount="indefinite"></animate>
+      </circle>
+    </svg>
   </div>
 </template>
 
 <script>
   export default {
     props: {
-      data: {
+      dataList: {
         type: Array,
         default: () => null
       },
       radio: {
         type: Boolean,
         default: () => false
-      },
-      dataUrl: String
+      }
     },
     data () {
       return {
-        dataCopy: this.data,
-        loading: 'loading',
         show: {}
       }
     },
@@ -61,7 +54,7 @@
         const sendData = {
           checked: event.checked,
           target,
-          checkedList: this.dataCopy,
+          checkedList: this.dataList,
           parent
         }
         this.$emit('onCheck', sendData)
@@ -74,34 +67,6 @@
         if (this.show[ind]) {
           return { height: length * 30 + 'px' }
         }
-      },
-      loadData (url) {
-        return new Promise((resolve, reject) => {
-          const obj = new XMLHttpRequest()
-          obj.open('GET', url, true)
-          obj.onreadystatechange = () => {
-            if (obj.readyState !== 4) return
-            if (obj.status === 304 || obj.status === 200) {
-              const responseText = obj.responseText
-              resolve(JSON.parse(responseText))
-            } else {
-              this.$emit('loadError')
-              this.loading = 'error'
-            }
-          }
-          obj.send(null)
-        })
-      }
-    },
-    mounted () {
-      const dataUrl = this.dataUrl
-      // 如果没有data，但是有dataUrl,那么请求Url获取数据
-      if (!this.dataCopy && dataUrl) {
-        this.loadData(dataUrl).then((response) => {
-          this.$emit('loadFinish')
-          this.dataCopy = response.data
-          this.loading = 'finish'
-        })
       }
     }
   }

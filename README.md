@@ -20,7 +20,7 @@ import TreeSelect from 'treeselect'
 
 ```html
 <template>
-  <TreeSelect :data="data"></TreeSelect>
+  <TreeSelect :dataList="data"></TreeSelect>
 </template>
 
 <script>
