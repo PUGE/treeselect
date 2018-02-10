@@ -4,13 +4,13 @@
 
 ## 安装
 
-Use npm to download code:
+安装模块
 
 ```
-npm install treeselect -S
+npm install  -S treeselect
 ```
 
-then import it into your project, add below code into your `main.js`:
+在工程中的 `main.js`文件里引入模块:
 
 ```js
 import TreeSelect from 'treeselect'
